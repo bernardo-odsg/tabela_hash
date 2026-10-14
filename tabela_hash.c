@@ -101,3 +101,25 @@ bool busca_na_tabela_hash(int n, tabela_hash *minha_tabela) {
 	}
 	return false;
 }
+
+void libera_memoria_lista_encadeada(node *head, int qtd_nos) {
+	if (head == NULL) {
+		return;
+	}
+	node *head_auxiliar = head;
+	for (int m = qtd_nos ; m > 0 ; m--) {
+		for (int i = 0 ; i < m - 1 ; i++) {
+			head_auxiliar = head_auxiliar -> proximo;
+		}
+		free(head_auxiliar);
+		head_auxiliar = head;
+	}
+}
+
+void libera_memoria_tabela_hash(tabela_hash *minha_tabela) {
+	for (int i = 0 ; i < minha_tabela -> m ; i++) {
+		libera_memoria_lista_encadeada((minha_tabela -> vetor)[i]);
+	}
+	free(minha_tabela -> vetor);
+	free(minha_tabela);
+}

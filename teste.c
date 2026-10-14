@@ -3,17 +3,21 @@
 int main() {
 	int n, qtd = 0;
 	char c_leitura, c_resposta;
-	node *head;
+	node *head = NULL;
 	printf("Digite os valores dos nós a serem criados: ");
 	while (scanf("%d", &n) == 1) {
 		c_leitura = getchar();
 		if (c_leitura == '\n' || c_leitura == ' ' || c_leitura == '\t') {
 			qtd += 1;
 			if (qtd == 1) {
-				head = criar_head(n);
+				if (criar_head(n) != NULL) {
+					head = criar_head(n);
+				}			
 			}
 			else {
-				head = inserir_head(head, n);
+				if (inserir_head(head, n) != NULL) {
+					head = inserir_head(head, n);
+				}
 			}
 			if (c_leitura == '\n') {
 				break;
@@ -32,10 +36,16 @@ int main() {
 			break;
 		}
 	}
+	if (qtd == 0 || head == NULL) {
+		return 1;
+	}
 	while (c_leitura != '\n') {
 		c_leitura = getchar(); 
 	}
 	tabela_hash *minha_tabela = criar_tabela_hash(qtd);
+	if (minha_tabela == NULL) {
+		return 1;
+	}
 	insercao_na_tabela_hash(head, minha_tabela);
 	do {
 		printf("Deseja fazer uma busca? (S) ou (N): ");
@@ -55,5 +65,7 @@ int main() {
 			}
 		}
 	} while (c_resposta == 'S');
+	libera_memoria_tabela_hash(minha_tabela);
+	libera_memoria_lista_encadeada(head);
 	return 0;
 }

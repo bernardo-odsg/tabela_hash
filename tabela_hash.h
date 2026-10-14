@@ -24,5 +24,7 @@ tabela_hash *criar_tabela_hash(int n);
 int funcao_hash(int valor, int m);
 void insercao_na_tabela_hash(node *head, tabela_hash *minha_tabela);
 bool busca_na_tabela_hash(int n, tabela_hash *minha_tabela);
+void libera_memoria_lista_encadeada(node *head, int qtd_nos); 
+void libera_memoria_tabela_hash(tabela_hash *minha_tabela); 
 
 #endif
