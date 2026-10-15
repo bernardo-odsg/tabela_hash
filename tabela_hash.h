@@ -20,11 +20,11 @@ node *criar_head(int valor);
 node *inserir_head(node *head, int valor);
 bool ehPrimo(int n);
 int encontra_primo(int n);
-tabela_hash *criar_tabela_hash(int n);
+tabela_hash *criar_tabela_hash(int qtd_nos);
 int funcao_hash(int valor, int m);
 void insercao_na_tabela_hash(node *head, tabela_hash *minha_tabela);
 bool busca_na_tabela_hash(int n, tabela_hash *minha_tabela);
-void libera_memoria_lista_encadeada(node *head, int qtd_nos); 
+void libera_memoria_lista_encadeada(node *head);
 void libera_memoria_tabela_hash(tabela_hash *minha_tabela); 
 
 #endif
