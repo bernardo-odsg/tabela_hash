@@ -21,25 +21,32 @@ node *inserir_head(node *head, int valor) {
      return nova_head;
 }
 
+void libera_memoria_lista_encadeada(node *head) {
+     if (head == NULL) {
+     	return;
+     }
+     node *head_auxiliar;
+     while (head -> proximo != NULL) {
+     	head_auxiliar = head -> proximo;
+     	free(head);
+     	head = head_auxiliar;
+     }
+     free(head);
+}
+
 bool eh_Primo(int n) {
-	assert (n > 1);
-	if (n == 2) {
-	   return true;
+	if (n % 2 == 0) {
+	   return false;
 	}
 	else {
-	   if (n % 2 == 0) {
-	      return false;
+	   int d = 3;
+	   while (d * d <= n) {
+	     if (n % d == 0) {
+	         return false;
+	     }
+	     d += 2;
 	   }
-	   else {
-	       int d = 3;
-	       while (d * d <= n) {
-	           if (n % d == 0) {
-	              return false;
-	           }
-	           d += 2;
-	       }
-           return true;
-	   }
+       return true;
 	}
 }
 
@@ -70,6 +77,14 @@ tabela_hash *criar_tabela_hash(int qtd_nos) {
 	return minha_tabela;
 }
 
+void libera_memoria_tabela_hash(tabela_hash *minha_tabela) {
+	for (int i = 0 ; i < minha_tabela -> m ; i++) {
+		libera_memoria_lista_encadeada((minha_tabela -> vetor)[i]);
+	}
+	free(minha_tabela -> vetor);
+	free(minha_tabela);
+}
+
 int funcao_hash(int dado, int m) {
     return dado % m;
 }
@@ -79,11 +94,18 @@ void insercao_na_tabela_hash(node *head, tabela_hash *minha_tabela) {
        int posicao = funcao_hash(head -> dado, minha_tabela -> m);
        if ((minha_tabela -> vetor)[posicao] == NULL) {
        	   (minha_tabela -> vetor)[posicao] = criar_head(head -> dado);
+       	   if ((minha_tabela -> vetor)[posicao] == NULL) {
+       	       libera_memoria_lista_encadeada(head);
+       	       libera_memoria_tabela_hash(minha_tabela);
+       	       exit(1);
+       	   }
        }
        else {
        	   (minha_tabela -> vetor)[posicao] = inserir_head((minha_tabela -> vetor)[posicao], head -> dado);
        	   if ((minha_tabela -> vetor)[posicao] == NULL) {
-       	   	   return;
+       	   	   libera_memoria_lista_encadeada(head);
+       	   	   libera_memoria_tabela_hash(minha_tabela);
+       	   	   exit(1);
        	   }
        }
        head = head -> proximo;
@@ -100,25 +122,4 @@ bool busca_na_tabela_hash(int n, tabela_hash *minha_tabela) {
 		endereco_atual_na_posicao = endereco_atual_na_posicao -> proximo;
 	}
 	return false;
-}
-
-void libera_memoria_lista_encadeada(node *head) {
-     if (head == NULL) {
-     	return;
-     }
-     node *head_auxiliar;
-     while (head -> proximo != NULL) {
-     	head_auxiliar = head -> proximo;
-     	free(head);
-     	head = head_auxiliar;
-     }
-     free(head);
-}
-
-void libera_memoria_tabela_hash(tabela_hash *minha_tabela) {
-	for (int i = 0 ; i < minha_tabela -> m ; i++) {
-		libera_memoria_lista_encadeada((minha_tabela -> vetor)[i]);
-	}
-	free(minha_tabela -> vetor);
-	free(minha_tabela);
 }
